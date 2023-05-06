@@ -5,6 +5,7 @@ from keras.datasets import mnist
 from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
 from tools import visualize_history, normalize_data, augment_data
+import time
 
 name = "MODEL2"
 
@@ -61,9 +62,11 @@ model.add(tf.keras.layers.Dense(10, activation='softmax'))
 
 model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
-checkpoint = ModelCheckpoint(f"{name}/{name}.h5", monitor='val_loss', verbose=1, save_best_only=True, mode='min')
+checkpoint = ModelCheckpoint(f"{name}/{name}.h5", monitor='val_accuracy', verbose=1, save_best_only=True, mode='max')
 
+start_time = time.time()
 history = model.fit(x_train1, y_train1, epochs=5, validation_data=(x_val1, y_val1), callbacks=[checkpoint])
+end_time = time.time()
 
 visualize_history(history, name)
 
@@ -71,9 +74,11 @@ model.save(name)
 
 print(f"{name} saved\n")
 
-model = tf.keras.models.load_model(name)
+model = tf.keras.models.load_model(f"{name}/{name}.h5")
 
 val_loss, val_acc = model.evaluate(x_val1, y_val1, verbose=2)
 print(f"\nVal accuracy:  {val_acc*100} %")
 test_loss, test_acc = model.evaluate(x_test1, y_test1, verbose=2)
 print(f"\nTest accuracy: {test_acc*100} %")
+
+print(f"\nTime: {(end_time - start_time):.2f} s")
