@@ -44,6 +44,6 @@ model = tf.keras.models.load_model(name)
 
 val_loss, val_acc = model.evaluate(x_val1, y_val1, verbose=2)
 print(f"\nVal accuracy:  {val_acc*100} %")
-test_loss, test_acc = model.evaluate(test_x, test_y, verbose=2)
+test_loss, test_acc = model.evaluate(x_test1, y_test1, verbose=2)
 print(f"\nTest accuracy: {test_acc*100} %")
 
