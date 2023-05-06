@@ -11,6 +11,7 @@ def visualize_history(history: tf.keras.callbacks.History, title = "") -> None:
     Parameters
     ----------
     history : tf.keras.callbacks.History
+    title : str, optional
     """
     df_hist = pd.DataFrame(history.history)
 
