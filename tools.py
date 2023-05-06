@@ -1,6 +1,8 @@
 import pandas as pd
 import tensorflow as tf
+from keras.preprocessing.image import ImageDataGenerator
 from matplotlib import pyplot as plt
+import numpy as np
 
 def visualize_history(history: tf.keras.callbacks.History, title = "") -> None:
     """
@@ -33,3 +35,19 @@ def visualize_history(history: tf.keras.callbacks.History, title = "") -> None:
 
     plt.tight_layout()
     plt.show()
+
+def normalize_data(data):
+    data = data.astype(np.float32)
+    for image_id in range(len(data)):
+        data[image_id] = data[image_id] / 255. * 2. - 1.
+    return data
+
+
+def augment_data(x, y, batch_size):
+    train_datagen = ImageDataGenerator(
+        rotation_range=20,
+        width_shift_range=0.2,
+        height_shift_range=0.2,
+    )
+    return train_datagen.flow(x, y, batch_size=batch_size)
+
